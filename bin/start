@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "lptimekeeping"
-
-cli = Lptimekeeping::Terminal.new()
+require 'bundler/setup'
+require 'lptimekeeping'
+# Create the cli instance to start the credintials process
+cli = Lptimekeeping::Terminal.new
+# start the menu loop
 cli.start
