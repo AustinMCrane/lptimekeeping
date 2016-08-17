@@ -130,6 +130,8 @@ module Lptimekeeping
     end
 
     # TODO: change this to clocked_in?
+    # Checks if the user is clocked in based on the user
+    # having any running timers
     def is_clocked_in
       if @lp.timers(@workspace).count == 0
         return false
@@ -138,6 +140,8 @@ module Lptimekeeping
       end
     end
 
+    # Timekeeping menu option integration function
+    # TODO: probably needs simplified and made better
     def timekeeping
       if is_clocked_in == true
         option = ask('You are clocked in, would you like to clock out?(y/n)')
@@ -155,28 +159,45 @@ module Lptimekeeping
       end
     end
 
+    # TODO: Simpliy this mess...
+    # The main loop for the menu of the terminal application
+    # 1. timekeeping
+    # 2. list projects and tasks
+    # 3. exit program
     def start
+      # TODO: could Simpliy this into another setup function
+      # Get the users account info to make sure that they have good credintials
       account = @lp.account
+      # Show the user a welcome message for successful login
       puts "You are #{account['user_name']} (#{account['id']})"
+      # used to decide to stay in menu loop
       should_prompt = true
+      # Set default workspace scope
       @workspace =  select_workspace
+      # Check if there are any currently clocked in tasks
       @task = @lp.current_task(@workspace)
+      # Loop through menu until user exits with option 3
       while should_prompt
+        # Prompt user for input based on options menu
         option = ask(option_prompt)
+        # User selected timekeeping
         if option == '1'
           timekeeping
         end
+        # User selected List Tasks
         if option == '2'
+          # TODO: could be simplified
           scope_project
           divider
           print_tasks
         end
-        # if option == '3'
-        #   list_timers
-        # end
+        # User selected Exit
         if option == '3'
+          # set the condition for while loop to be false for quick exit
+          # on next loop back
           should_prompt = false
         end
+        # print out an organizational divider
         divider
       end
     end
